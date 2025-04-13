@@ -1,0 +1,32 @@
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_USER: user_exp
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: etracker_db
+      MYSQL_ROOT_PASSWORD: root_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    networks:
+      - app-network
+  app:
+    image: local/fastapi-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+
+networks: 
+  app-network:
+    driver: bridge

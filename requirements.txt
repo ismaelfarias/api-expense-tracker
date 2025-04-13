@@ -1,0 +1,7 @@
+fastapi[standard]
+pydantic
+SQLModel
+uvicorn
+alembic
+pymysql
+cryptography
